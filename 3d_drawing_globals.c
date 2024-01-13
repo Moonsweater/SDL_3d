@@ -7,7 +7,6 @@
 #include "M3d_extended.c"
 
 #define MAX_OBJECTS 5
-#define MAX_LIGHTS 3
 #define MAX_POLYGONS 2000
 #define MAX_POINTS_PER_POLYGON 20
 #define MAX_POINTS 2000
