@@ -40,8 +40,6 @@ int main(int argc, char** argv) {
   
   int tick_counter;
   
-  //int junk;
-  
   while (1) {
   
     SDL_Delay(16);

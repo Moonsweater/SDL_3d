@@ -105,7 +105,7 @@ void polygon_order_init() {
     }
   }
   
-  printf("polygon_order_init()\n");
+  //printf("polygon_order_init()\n");
   
   return;
 }
@@ -140,7 +140,7 @@ void initialize_lighting_data(point3 pos, double amb, double diff, int spec) {
    lighting.diffuse = diff;
    lighting.spec_power = spec;
    
-   printf("initialize_lighting_data.\n");
+   //printf("initialize_lighting_data.\n");
    
 }
 
@@ -174,7 +174,7 @@ void initialize_keyboard() {
   updating_graphics = false;
   shutting_off_graphics = false;
   
-  printf("initialize_keyboard.\n");
+  //printf("initialize_keyboard.\n");
   
   return;
   
@@ -193,7 +193,7 @@ void read_xyz(FILE *f, int obj) {
   }
   
   fscanf(f, "%d", &points_per_object[obj]);
-  printf("%d points in object %d. \n", points_per_object[obj], obj);
+  //printf("%d points in object %d. \n", points_per_object[obj], obj);
   for (int i=0; i < points_per_object[obj]; i++) {
     fscanf(f, "%lf %lf %lf", &points[obj][i].x, &points[obj][i].y, &points[obj][i].z);
     sum.x += points[obj][i].x;
@@ -267,7 +267,7 @@ void initialize_polygon_colors() {
       polycolors[o][p].b = 0;
     }
   }
-  printf("initialize_polygon_colors()\n");
+  //printf("initialize_polygon_colors()\n");
   return;
 }
 

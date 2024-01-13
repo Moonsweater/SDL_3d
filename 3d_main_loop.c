@@ -120,7 +120,7 @@ void handle_transformations_and_drawing(SDL_Renderer *r, int *start_ticks, int c
       //printf("dx = %lf, dy = %lf, dz =  %lf. \n", dx, dy, dz);
       
       if (SDL_GetTicks() - *start_ticks < time_delay) {
-        printf("No draw attempted. Ticks elapsed: %d \n", SDL_GetTicks() - *start_ticks);
+        //printf("No draw attempted. Ticks elapsed: %d \n", SDL_GetTicks() - *start_ticks);
         //If not enough time has passed, just compute the translations, but keep them in memory, without computing, drawing, or rendering the changes.
           translate_shape(
             0.25*(keys.R - keys.L), 
@@ -136,7 +136,7 @@ void handle_transformations_and_drawing(SDL_Renderer *r, int *start_ticks, int c
           rotate_about_center(M_PI/20, 'z' * keys.z, center[current_object]);
       } else {
         //Otherwise, do everything normally.
-        printf("Draw attempted. Ticks elapsed: %d\n", SDL_GetTicks() - *start_ticks);
+        //printf("Draw attempted. Ticks elapsed: %d\n", SDL_GetTicks() - *start_ticks);
         //printf("Net left = %d \n", 3*(keys.right - keys.left));
         *start_ticks = SDL_GetTicks();
         translate_shape(
