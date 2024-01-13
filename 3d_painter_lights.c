@@ -14,10 +14,10 @@ void set_color(SDL_Renderer* r, color c) {
   return;
 }
 
-int z_sorting_compare(const void *a, const void *b) {
+int z_polygon_compare(const void *a, const void *b) {
   
-  sorting_data *A, *B;
-  A = (sorting_data*)a; B = (sorting_data*)b;
+  polygon_sorting_data *A, *B;
+  A = (polygon_sorting_data*)a; B = (polygon_sorting_data*)b;
   
   if ((*A).z_avg < (*B).z_avg) {return -1;}
   else if ((*A).z_avg > (*B).z_avg) {return 1;}
@@ -42,10 +42,9 @@ double z_polygon_avg(int obj, int p) {
 void update_z_averages() {
   int o, p;
   for (int i=0; i < num_polygons; i++) {
-    if (sorting_order[i].is_light) {continue;}
-    o = sorting_order[i].object;
-    p = sorting_order[i].polygon;
-    sorting_order[i].z_avg = -fabs(z_sorting_avg(o,p));
+    o = polygon_order[i].object;
+    p = polygon_order[i].polygon;
+    polygon_order[i].z_avg = -fabs(z_polygon_avg(o,p));
   }
   //printf("update_z_averages\n");
   return;
@@ -53,7 +52,7 @@ void update_z_averages() {
 
 void z_sort_points() {
   update_z_averages();
-  qsort(sorting_order, num_polygons, sizeof(orting_data), z_sorting_compare);
+  qsort(polygon_order, num_polygons, sizeof(polygon_sorting_data), z_polygon_compare);
   //printf("z_sort_points()\n");
   return;
 }
@@ -108,34 +107,6 @@ void draw_polygon(SDL_Renderer *r, int o, int p) {
   
 }
 
-void draw_light(SDL_Renderer *r, int which_light) {
-
-  point3 *p = lighting.position[sorting_order[i].o];
-  
-  if ((*p).z < clipping_box[0].base_point.z) {return;}
-
-  int o = which_light;
-  int Radius = 40 * viewport_scale_x / (*p).z;
-  //Radius should eventually depend on brightness of light,
-  //AND DISTANCE FROM VIEWPORT.
-  
-  for (int i=Radius; i > 0; i--) {
-    
-    double r = i;
-    double r_over_R = r / Radius;
-    double brightness = r_over_R - 2*sqrt(r_over_R) - 1;
-    int brightnessI = 255*brightness;
-    
-    SDL_SetRenderDrawColor(r, brightnessI, brightnessI, brightnessI, 255 - brightnessI);
-    
-    //Since we're drawing each radius one-by-one, non-filled circles SHOULD work.
-   
-    circle((*p).x * viewport_scale_x / (*p).z, (*p).x * viewport_scale_x / (*p).z, r);
-    
-  }
-  
-}
-
 void draw_objects(SDL_Renderer *r) {
 
   z_sort_points();
@@ -146,13 +117,8 @@ void draw_objects(SDL_Renderer *r) {
   int o, p;
   for (int i=0; i < num_polygons; i++) {
     
-    if (sorting_order[i].is_light) {
-      draw_light(r, o);
-      continue;
-    }
-    
-    o = sorting_order[i].object;
-    p = sorting_order[i].polygon;
+    o = polygon_order[i].object;
+    p = polygon_order[i].polygon;
     
     draw_polygon(r, o, p);
     //printf("Polygon Drawing %d Complete. z average equals %lf \n", i, polygon_order[i].z_avg);

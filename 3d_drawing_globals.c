@@ -69,60 +69,6 @@ void init_clipping_data() {
 
 }
 
-//Color & Lighting:
-
-typedef struct {
-  Uint8 r;
-  Uint8 g;
-  Uint8 b;
-} color;
-
-void print_color(color c) {
-  printf("%d, %d, %d \n", c.r, c.g, c.b);
-}
-
-color polycolors[MAX_OBJECTS][MAX_POLYGONS];
-
-typedef struct {
-
-  point3 position[MAX_LIGHTS];
-  
-  double ambient;
-  double diffuse;
-  int spec_power;
-  int num_lights;
-  
-  portion
-  
-} lighting_data;
-
-lighting_data lighting
-
-void initialize_lighting_data(double amb, double diff, int spec) {
-
-   //In an ideal world, this would be done on a per-material basis.
-
-   lighting.ambient = amb;
-   lighting.diffuse = diff;
-   lighting.spec_power = spec;
-   lighting.num_lights = 0;
-   
-   printf("initialize_lighting_data.\n");
-   
-}
-
-void add_light(double x, double y, double z) {
-
-  int L = lighting.num_lights;
-
-  lighting.position[L].x = x;
-  lighting.position[L].y = y;
-  lighting.position[L].z = z;
-  lighting.num_lights++;
-  
-  return;
-}
-
 //Point data:
 
 typedef struct {
@@ -139,35 +85,63 @@ int points_per_object[MAX_OBJECTS];
 int num_objects;
 
 typedef struct {
-  bool is_light;
   int object;
   int polygon;
-  double z;
-} sorting_data;
+  double z_avg;
+} polygon_sorting_data;
 
 polygon_data polygons[MAX_OBJECTS][MAX_POLYGONS];
-polygon_sorting_data sorting_order[MAX_OBJECTS*MAX_POLYGONS + MAX_LIGHTS];
+polygon_sorting_data polygon_order[MAX_OBJECTS*MAX_POLYGONS];
 
 int points_per_polygon[MAX_OBJECTS][MAX_POLYGONS];
 
-void sorting_order_init() {
+void polygon_order_init() {
   int i=0;
   for (int o = 0; o < num_objects; o++) {
     for (int p=0; p < polygons_per_object[o]; p++) {
-      sorting_order[i].is_light = false;
-      sorting_order[i].object = o;
-      sorting_order[i].polygon = p;
+      polygon_order[i].object = o;
+      polygon_order[i].polygon = p;
       i++;
     }
   }
-  for (int l = 0; l < lighting.num_lights; l++) {
-    sorting_order[l].is_light = true;
-    i++;
-  }
   
-  printf("sorting_order_init()\n");
+  printf("polygon_order_init()\n");
   
   return;
+}
+
+//Color & Lighting:
+
+typedef struct {
+  Uint8 r;
+  Uint8 g;
+  Uint8 b;
+} color;
+
+void print_color(color c) {
+  printf("%d, %d, %d \n", c.r, c.g, c.b);
+}
+
+color polycolors[MAX_OBJECTS][MAX_POLYGONS];
+
+typedef struct {
+  point3 position;
+  double ambient;
+  double diffuse;
+  int spec_power;
+} lighting_data;
+
+lighting_data lighting;
+
+void initialize_lighting_data(point3 pos, double amb, double diff, int spec) {
+
+   lighting.position = pos;
+   lighting.ambient = amb;
+   lighting.diffuse = diff;
+   lighting.spec_power = spec;
+   
+   printf("initialize_lighting_data.\n");
+   
 }
 
 //Keyboard / Main Loop:
@@ -302,14 +276,10 @@ void initialize_globals() {
   //Should be called AFTER writing in your files and stuff.
 
   initialize_keyboard();  
-  
   point3 light_pos; light_pos.x = 100; light_pos.y = 200; light_pos.z = 0;
-  initialize_lighting_data(0.4, 0.4, 50);
-  add_light(100, 200, 0);
-  //Start by just doing one light. We can add more later.
-    
+    initialize_lighting_data(light_pos, 0.4, 0.4, 50);
   initialize_polygon_colors();
-  sorting_order_init();
+  polygon_order_init();
   time_delay = 33;
   viewport_scale_x = WIN_X * 0.5 / tan(half_angle);
   viewport_scale_y = WIN_Y * 0.5 / tan(half_angle);

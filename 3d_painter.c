@@ -14,10 +14,10 @@ void set_color(SDL_Renderer* r, color c) {
   return;
 }
 
-int z_sorting_compare(const void *a, const void *b) {
+int z_polygon_compare(const void *a, const void *b) {
   
-  sorting_data *A, *B;
-  A = (sorting_data*)a; B = (sorting_data*)b;
+  polygon_sorting_data *A, *B;
+  A = (polygon_sorting_data*)a; B = (polygon_sorting_data*)b;
   
   if ((*A).z_avg < (*B).z_avg) {return -1;}
   else if ((*A).z_avg > (*B).z_avg) {return 1;}
@@ -42,20 +42,11 @@ double z_polygon_avg(int obj, int p) {
 void update_z_averages() {
   int o, p;
   for (int i=0; i < num_polygons; i++) {
-    if (is_light) {
-      
-      continue;
-    }
     o = polygon_order[i].object;
     p = polygon_order[i].polygon;
     polygon_order[i].z_avg = -fabs(z_polygon_avg(o,p));
   }
   //printf("update_z_averages\n");
-  
-  for (int l = 0; l < lighting.num_lights; l++) {
-    
-  }
-  
   return;
 }
 
