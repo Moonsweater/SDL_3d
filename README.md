@@ -1,11 +1,7 @@
 # SDL_3d
 Implementation of flat shading via painter's algorithm in SDL.
 
-
-
-Reads XYZ files with connectivity information:
-
-
+Reads in XYZ files with connectivity information as command-line arguments:
 
 ```
 [Number of vertices]
