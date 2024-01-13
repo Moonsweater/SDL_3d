@@ -19,3 +19,7 @@ In program, use the following keystrokes to transform your image:
 Translations: Arrow keys, +, -
 
 Rotations (In place, about center of mass): x, y, z
+
+Sample image of program:
+
+![](TorusDemo.png)
