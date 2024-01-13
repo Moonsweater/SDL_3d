@@ -36,6 +36,14 @@ int main(int argc, char** argv) {
   
   initialize_globals();
   
+  //Rough translation to put images inside the viewport. Not all images will fit perfectly inside the viewport.
+  
+  M3d_begin_transformations();
+  translate_shape(0, 0, 20);
+  center[0].z += 20;
+  M3d_apply_transformations(0);
+  draw_objects(r);
+  SDL_RenderPresent(r);
   M3d_begin_transformations();
   
   int tick_counter;
