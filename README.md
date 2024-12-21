@@ -1,5 +1,6 @@
 # SDL_3d
-Implementation of flat shading via painter's algorithm in SDL.
+
+A port of a class project implementing flat shading via painter's algorithm, using SDL instead of the professor's X11 wrapper.
 
 Reads in XYZ files with connectivity information as command-line arguments:
 
